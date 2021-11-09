@@ -1,0 +1,43 @@
+@import "~bootstrap/scss/bootstrap";
+
+body {
+    background-color: lightgray;
+}
+
+.navbar{
+    &.navbar-dark{
+        background: red;
+    }
+}
+
+#Movies{
+    .movie{
+        position: relative;
+        cursor: pointer;
+        &:hover{
+            background: #efeeee;
+            transform: scale(1.1);
+            z-index: 2;
+            box-shadow: 0 0 8px 4px #afa3a3;
+        }
+
+        .movieImg{
+            width: 100%;
+        }
+        &.modal-open{
+            opacity: 0.2;
+        }
+    }
+
+    #MovieModal{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 8px 16px;
+        width: 90%;
+        max-width: 700px;
+        z-index: 10;
+    }
+}
