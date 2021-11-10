@@ -2,18 +2,24 @@
 
 {% block title %}Please log in{% endblock %}
 
+{% block body_class %}darkBody{% endblock %}
+
 {% block body %}
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <div class="container main-container">
+        <div id="Login">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-12">
+                    <form class="form" action="{{ path('login') }}" method="post">
+                        <label for="username" class="text-warning">Email:</label>
+                        <input type="text" id="username" name="_username" class="form-control" />
 
-    <form action="{{ path('login') }}" method="post">
-        <label for="username">Email:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}"/>
+                        <label for="password" class="text-warning">Password:</label>
+                        <input type="password" id="password" name="_password" class="form-control" />
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="_password"/>
-
-        <button type="submit">login</button>
-    </form>
+                        <button class="my-2 float-end btn btn-warning" type="submit">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

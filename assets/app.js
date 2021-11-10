@@ -30,6 +30,8 @@ class App extends React.Component {
         fetch('http://localhost/index.php/movies/')
             .then(response => response.json())
             .then(movies => {
+                console.log("movies")
+                console.log(movies)
                 this.setState({
                     movies
                 });
@@ -56,6 +58,26 @@ class App extends React.Component {
         this.setState({
             searchMovieField: event.target.value
         });
+    };
+
+    handleAddToFavorite = (action) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                movieId: this.state.selectedMovie,
+                action: action,
+            })
+        };
+        fetch('http://localhost/index.php/movies/favourite/', requestOptions)
+            .then(response => response.json())
+            .then((datas) => {
+                this.setState({
+                    searchMovieField: "",
+                    openMovieDetail: false,
+                    movies: JSON.parse(datas.movies),
+                })
+            });
     };
 
     renderMovies = () => {
@@ -90,6 +112,7 @@ class App extends React.Component {
                 <MovieModal
                     movie={movie}
                     onCloseModal={this.onCloseModal}
+                    handleAddToFavorite={this.handleAddToFavorite}
                 >
                 </MovieModal>
             );
@@ -108,4 +131,6 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById('Movies'));
+if(document.getElementById('Movies') !== null){
+    ReactDOM.render(<App />, document.getElementById('Movies'));
+}

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entity\Favourite;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 use App\Entity\Movie;
@@ -97,17 +98,13 @@ En 2001, quatre millions d'années plus tard, un vaisseau spatial évolue en orb
     }
 
     /**
-     * @param User|null $user
+     *
      */
-    public function getMoviesByUser(User $user = null)
+    public function getMoviesInArray()
     {
         $movieRepo = $this->em->getRepository(Movie::class);
-        // If user is not logged in I return all movies
-        if($user === null){
-            $movies = $movieRepo->findAllInArray();
 
-            return $movies;
-        }
+        return $movieRepo->findAllInArray();
     }
 
     /**
@@ -153,5 +150,51 @@ En 2001, quatre millions d'années plus tard, un vaisseau spatial évolue en orb
         }catch (\Exception $e){
             $this->logger->warning("Error when creating default movies : {$e->getMessage()}");
         }
+    }
+
+    /**
+     * @param $user
+     * @param $movieId
+     * @param $action
+     * @throws \Exception
+     */
+    public function handleFavourite($user, $movieId, $action)
+    {
+        if(empty($user)){
+            throw new \Exception("You must be logged in to add this movie in favourite");
+        }
+
+        if($movieId === "" || $action === ""){
+            throw new \Exception("You try to make an impossible action");
+        }
+
+        /** @var Movie $movie */
+        $movie = $this->em->getRepository(Movie::class)->find($movieId);
+        if($movie === null){
+            throw new \Exception("The movie you want to {$action} does not exists");
+        }
+
+        switch ($action){
+            case "add":
+                $favourite = new Favourite();
+                $favourite->setMovie($movie);
+                $favourite->setUser($user);
+                $this->em->persist($favourite);
+                break;
+            case "delete":
+                $favouriteRepo = $this->em->getRepository(Favourite::class);
+                $favourite = $favouriteRepo->findOneBy([
+                    "user" => $user,
+                    "movie" => $movie,
+                ]);
+                $this->em->remove($favourite);
+                break;
+            default:
+                throw new \Exception("Action {$action} is not allow here");
+        }
+
+        $this->em->flush();
+
+        return $this->getMoviesInArray();
     }
 }

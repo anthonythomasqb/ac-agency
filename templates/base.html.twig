@@ -7,7 +7,19 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body class="{% block body_class %}{% endblock %}">
+        <input type="hidden" id="user_id" value="{{ app.user != null ? app.user.id : '' }}" />
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+            <div class="navbar-content">
+                <a class="navbar-brand" href="{{ path("homepage") }}">My Movie Project</a>
+                {% if app.user %}
+                    <a class="navbar-login float-end" href="{{ path("logout") }}">Log out</a>
+                {% else %}
+                    <a class="navbar-logout float-end" href="{{ path("login") }}">Log in</a>
+                {% endif %}
+            </div>
+        </nav>
+
         {% block body %}{% endblock %}
 
         {% block javascripts %}

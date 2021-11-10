@@ -42,7 +42,9 @@ class MovieRepository extends ServiceEntityRepository
     public function findAllInArray()
     {
         return $this->createQueryBuilder('m')
-            ->select('m.id', 'm.title', 'm.description', 'm.category', 'm.image')
+            ->select('m.id', 'm.title', 'm.description', 'm.category', 'm.image', 'u.id as user_id')
+            ->leftJoin('m.favourites', 'f')
+            ->leftJoin('f.user', 'u')
             ->orderBy('m.title', 'ASC')
             ->getQuery()
             ->getArrayResult()
