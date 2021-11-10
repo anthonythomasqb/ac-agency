@@ -1,33 +1,26 @@
-AC Web Agency : Test de recrutement développeur sénior.
+# My Movie Project
 
-MAJ : 30/09/2021
-*****************************************************************
+This project is a test project to list dynamically many movies.
 
-## Mise en place
+## Running locally
 
-Pour démarrer le test technique :
+### Prerequisites
 
-- Créez votre propre compte GitHub
-- Clonez ce repository en local sur votre GitHub
+In order to run the project locally, you need to :
 
-## Test technique (maximum 2h00)
+1. Install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/) on your computer.
+2. Install [yarn](https://yarnpkg.com/getting-started/install) on your computer.
 
-Pour débuter le projet, merci de vous référer aux user stories correspondantes via le board associé
+### Launch project locally
 
-**Notes à prendre en compte :**
+1. Create a `.env` file based on `.env.dist`
 
-- Un développeur mal intentionné à cassé le projet initial, vous devez avant toute chose le refaire fonctionner
-- Le projet doit s'executer dans un sqlite, celui-ci doit être fourni à la racine du projet
-- Le buid de production doit être réalisé via le répertoire "dist"
+Make sure you have the value `mysql://root:root@mysql/ac-agency` for the `DATABASE_URL` parameter
 
-(Une attention particulière sera consacrée aux bonnes pratiques mise en place)
+2. Launch docker : `docker-compose up -d`
+3. Create database : `docker-compose exec -T php bin/console d:s:u --force`
+3. Load fake datas : `docker-compose exec -T php bin/console ac-agency:load:datas`
 
-### Explications diverses
-
-- Vous éviterez jQuery et favoriserez l'emploi de l'ES^6.
-- L'utilisation de bibliothèques externes est à proscrire. 
-
-## Fin du test
-
-- Pushez votre branche sur GitHub
-- Envoyez un mail à l'addresse : "contact@acwebagency.fr" avec le lien de votre dépôt
+> When last command is launched these datas are loaded in database
+> - 11 movies picked in [sens critique website](https://www.senscritique.com/films/tops/top100-des-top10)
+> - 2 default users with same roles : anthomas63@gmail.com and contact@acwebagency.fr with password "test"
